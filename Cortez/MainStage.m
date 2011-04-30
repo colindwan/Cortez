@@ -52,7 +52,7 @@
 	[scene addChild: layer];
     
     NSLog(@"Test");
-	
+	NSLog(@"Something different (master)");
 	// return the scene
 	return scene;
 
