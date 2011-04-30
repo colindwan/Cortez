@@ -53,6 +53,8 @@
     
     NSLog(@"Test");
 	NSLog(@"Something different (master)");
+    NSLog(@"Branch test");
+	
 	// return the scene
 	return scene;
 
