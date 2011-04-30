@@ -52,6 +52,7 @@
 	[scene addChild: layer];
     
     NSLog(@"Test");
+    NSLog(@"Branch test");
 	
 	// return the scene
 	return scene;
