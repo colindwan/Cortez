@@ -51,10 +51,6 @@
 	// add layer as a child to scene
 	[scene addChild: layer];
     
-    NSLog(@"Test");
-	NSLog(@"Something different (master)");
-    NSLog(@"Branch test");
-	
 	// return the scene
 	return scene;
 
@@ -483,6 +479,12 @@
     {
         Character *tempChar = [characters objectAtIndex:i];
         CGRect rect = [[tempChar mySprite] boundingBox];
+
+        // Artificially increase size of clickable area by 10%
+        rect.origin.x -= rect.size.width*0.05;
+        rect.origin.y -= rect.size.height*0.05;
+        rect.size.width *= 1.10;
+        rect.size.height *= 1.10;
         if (p0.x < rect.origin.x || p0.y < rect.origin.y || p0.x > rect.origin.x+rect.size.width || p0.y > rect.origin.y+rect.size.height) {
             continue;
         }

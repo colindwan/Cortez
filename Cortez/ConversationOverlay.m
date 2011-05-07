@@ -118,7 +118,8 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 - (void)unlockConvo:(CCMenuItem *)menuItem
 {
     [[GameEngine sharedGameEngine] unlockNode:self];
-    [self removeAllChildrenWithCleanup:YES];
+//    [self removeAllChildrenWithCleanup:YES];
+    [self removeChild:menu cleanup:YES];
     
     // [CAD] - this works but is janky - I should be able to pass whoever called me a message that I'm done without caring what kind of class it was
     [(MainStage *)[self parent] cleanupConvo];
@@ -131,8 +132,8 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 
 - (void)showStep:(NSString *)stepLabel
 {
-    [self removeAllChildrenWithCleanup:YES];
-    
+    //[self removeAllChildrenWithCleanup:YES];
+    [self removeChild:menu cleanup:YES];
     NSDictionary *stepDict = [convo objectForKey:stepLabel];
     CGSize s = [[CCDirector sharedDirector] winSize];
     
@@ -186,14 +187,14 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
         }
         NSDictionary *optionDict = [stepDict objectForKey:optionName];
         NSLog(@"Dissecting option %@", optionName);
-        NSString *optionText = [optionDict objectForKey:@"text"];
-        CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:@"conv_opt_1.png" 
-                                                           selectedImage:@"conv_opt_2.png" 
+        //NSString *optionText = [optionDict objectForKey:@"text"];
+        CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:@"btn_nice.png" 
+                                                           selectedImage:@"btn_nice_down.png" 
                                                                   target:self 
                                                                 selector:@selector(doSomething:)];
         [menuItem setTag:[[optionDict objectForKey:@"leads_to"] intValue]];
 //        [menuItem setPosition:ccp(-100,0)];
-        [menuItem setAnchorPoint:ccp(i,0)];
+//        [menuItem setAnchorPoint:ccp(i,0)];
         i++;
         [menu addChild:menuItem];        
     }
