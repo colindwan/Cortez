@@ -37,6 +37,13 @@
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
 		[self setupConvo];
+        // add overlay sprite
+        CGSize s = [[CCDirector sharedDirector] winSize];
+        CCSprite *leftNav = [CCSprite spriteWithFile:@"sidebar.png"];
+        [leftNav setAnchorPoint:ccp(1,1)];
+        leftNav.position = ccp(s.width, s.height);
+        [leftNav setScale:s.height/leftNav.contentSize.height];
+        [self addChild:leftNav z:1];
     }
 	return self;
 }
@@ -146,6 +153,7 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
         }
     }
     
+    /*
     [CCMenuItemFont setFontName:@"Times New Roman"];
     [CCMenuItemFont setFontSize:18];
     menu = [CCMenu menuWithItems:nil];
@@ -164,6 +172,30 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
         CCMenuItemFont *option = [CCMenuItemFont itemFromString:optionText target:self selector:@selector(doSomething:)];
         [option setTag:[[optionDict objectForKey:@"leads_to"] intValue]];
         [menu addChild:option];
+    }
+    [menu alignItemsVerticallyWithPadding:0.0];
+     */
+    menu = [CCMenu menuWithItems:nil];
+    [menu setPosition:ccp(s.width*0.85, s.height*0.5)];
+    [self addChild:menu z:2];
+    int i = 1;
+    for (NSString *optionName in stepDict)
+    {
+        if (!([optionName hasSuffix:@"response"])) {
+            continue;
+        }
+        NSDictionary *optionDict = [stepDict objectForKey:optionName];
+        NSLog(@"Dissecting option %@", optionName);
+        NSString *optionText = [optionDict objectForKey:@"text"];
+        CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:@"conv_opt_1.png" 
+                                                           selectedImage:@"conv_opt_2.png" 
+                                                                  target:self 
+                                                                selector:@selector(doSomething:)];
+        [menuItem setTag:[[optionDict objectForKey:@"leads_to"] intValue]];
+//        [menuItem setPosition:ccp(-100,0)];
+        [menuItem setAnchorPoint:ccp(i,0)];
+        i++;
+        [menu addChild:menuItem];        
     }
     [menu alignItemsVerticallyWithPadding:0.0];
 }
