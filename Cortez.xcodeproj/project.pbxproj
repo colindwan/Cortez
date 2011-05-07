@@ -145,6 +145,11 @@
 		D0DC5D5C13634E0300515B07 /* playerMasterAnims.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0DC5D5B13634E0300515B07 /* playerMasterAnims.plist */; };
 		D0DE6E34135D106000A3A011 /* GameEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D0DE6E33135D106000A3A011 /* GameEngine.m */; };
 		D0F82FC1135B9AEC0003AD4C /* room2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = D0F82FC0135B9AEB0003AD4C /* room2.tmx */; };
+		EA1993E21374BB0900104668 /* conv_opt_1.png in Resources */ = {isa = PBXBuildFile; fileRef = EA1993DD1374BB0900104668 /* conv_opt_1.png */; };
+		EA1993E31374BB0900104668 /* conv_opt_2.png in Resources */ = {isa = PBXBuildFile; fileRef = EA1993DE1374BB0900104668 /* conv_opt_2.png */; };
+		EA1993E41374BB0900104668 /* conv_opt_3.png in Resources */ = {isa = PBXBuildFile; fileRef = EA1993DF1374BB0900104668 /* conv_opt_3.png */; };
+		EA1993E51374BB0900104668 /* conv_opt_4.png in Resources */ = {isa = PBXBuildFile; fileRef = EA1993E01374BB0900104668 /* conv_opt_4.png */; };
+		EA1993EB1374C03500104668 /* sidebar.png in Resources */ = {isa = PBXBuildFile; fileRef = EA1993EA1374C03500104668 /* sidebar.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -409,6 +414,11 @@
 		D0DE6E32135D106000A3A011 /* GameEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameEngine.h; sourceTree = "<group>"; };
 		D0DE6E33135D106000A3A011 /* GameEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameEngine.m; sourceTree = "<group>"; };
 		D0F82FC0135B9AEB0003AD4C /* room2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = room2.tmx; path = Resources/Tiles/room2.tmx; sourceTree = "<group>"; };
+		EA1993DD1374BB0900104668 /* conv_opt_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = conv_opt_1.png; sourceTree = "<group>"; };
+		EA1993DE1374BB0900104668 /* conv_opt_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = conv_opt_2.png; sourceTree = "<group>"; };
+		EA1993DF1374BB0900104668 /* conv_opt_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = conv_opt_3.png; sourceTree = "<group>"; };
+		EA1993E01374BB0900104668 /* conv_opt_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = conv_opt_4.png; sourceTree = "<group>"; };
+		EA1993EA1374C03500104668 /* sidebar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -433,6 +443,11 @@
 		D00E50E11364848B00B02525 /* Conversations */ = {
 			isa = PBXGroup;
 			children = (
+				EA1993EA1374C03500104668 /* sidebar.png */,
+				EA1993DD1374BB0900104668 /* conv_opt_1.png */,
+				EA1993DE1374BB0900104668 /* conv_opt_2.png */,
+				EA1993DF1374BB0900104668 /* conv_opt_3.png */,
+				EA1993E01374BB0900104668 /* conv_opt_4.png */,
 				D00E50E3136484AC00B02525 /* conversation_test.plist */,
 			);
 			name = Conversations;
@@ -961,6 +976,11 @@
 				D0CEF0F01363ACA20031467F /* grass_tight.png in Resources */,
 				D0CEF0F11363ACA20031467F /* wood.png in Resources */,
 				D00E50E4136484AC00B02525 /* conversation_test.plist in Resources */,
+				EA1993E21374BB0900104668 /* conv_opt_1.png in Resources */,
+				EA1993E31374BB0900104668 /* conv_opt_2.png in Resources */,
+				EA1993E41374BB0900104668 /* conv_opt_3.png in Resources */,
+				EA1993E51374BB0900104668 /* conv_opt_4.png in Resources */,
+				EA1993EB1374C03500104668 /* sidebar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
