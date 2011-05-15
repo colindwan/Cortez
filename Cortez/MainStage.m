@@ -138,9 +138,6 @@
         myFileName = [[NSString alloc] initWithFormat:@"room1.tmx"];
         
         [self schedule:@selector(repositionPlayerZ:)];
-        
-        //ConversationOverlay *overlay = [[ConversationOverlay alloc] init];
-        //[self addChild:overlay z:100 tag:CONVO_TAG];
     }
 	return self;
 }
@@ -216,7 +213,14 @@
     for (NSDictionary *dict in group.objects) {
         if ([[dict objectForKey:@"type"] isEqualToString:@"generator"])
         {            
-            Character *temp = [[Character alloc] init];
+            // [CAD] - should I store this in a generic dictionary to support a larger and variable number of attributes?
+            //   maybe anything with a prefix "att"?
+            NSString *name = [dict objectForKey:@"name"];
+            NSString *convo = [dict objectForKey:@"conversation"];
+            
+            Character *temp = [[Character alloc] initWithDetails:name :convo];
+            //[temp setName:name];
+            //[temp setConvo:convo];
             temp.mySprite.position = ccp([[dict objectForKey:@"x"] intValue], [[dict objectForKey:@"y"] intValue]);
             [characters addObject:temp];
             int iNewZ = MAX(iMaxZ - ((temp.mySprite.position.y- temp.mySprite.textureRect.size.height/2)/tileSize.height), 0);
@@ -261,7 +265,8 @@
     // Get our touch information - where did we poke, how far is it, etc?
     CGPoint location = [self convertTouchToNodeSpace:touch];
     bool bEngageNPC = false;
-    CGPoint temp = [self pointInCharacter:location];
+    Character *foundChar = nil;
+    CGPoint temp = [self pointInCharacter:location :foundChar];
     if (!CGPointEqualToPoint(temp, CGPointZero)) {
         location = temp;
         bEngageNPC = true;
@@ -472,7 +477,7 @@
 
 #pragma mark - Character interaction
 
-- (CGPoint)pointInCharacter:(CGPoint)p0
+- (CGPoint)pointInCharacter:(CGPoint)p0 :(Character *)foundChar
 {
 //    CGPoint p0 = mainChar.mySprite.position;
     for (int i = 0; i < [characters count]; i++)
@@ -495,6 +500,9 @@
             newPoint = ccp(rect.origin.x - rect.size.width*.5, rect.origin.y);
         else
             newPoint = ccp(rect.origin.x + rect.size.width*1.5, rect.origin.y);
+        
+        foundChar = tempChar;
+        
         return newPoint;
 
     }
@@ -504,7 +512,7 @@
 - (void)startConvo
 {
     // [TODO] - set up convo based on who I clicked on
-    ConversationOverlay *overlay = [[ConversationOverlay alloc] init];
+    ConversationOverlay *overlay = [[ConversationOverlay alloc] initWithConvo:@"conversation_test.plist"];
     [self addChild:overlay z:100 tag:CONVO_TAG];
 }
 

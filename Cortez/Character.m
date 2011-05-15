@@ -13,7 +13,7 @@
 
 @implementation Character
 
-@synthesize mySprite, myBatchNode;
+@synthesize mySprite, myBatchNode, name, conversation;
 
 
 - (id)init
@@ -52,6 +52,16 @@
     myBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"playerWalkTexture.png"];
     [myBatchNode addChild:mySprite];
 
+    return self;
+}
+
+-(id)initWithDetails:(NSString *)newName :(NSString *)newConvo
+{
+    if (([super init])) {
+        [self init];
+        [self setName:newName];
+        [self setConversation:newConvo];
+    }
     return self;
 }
 

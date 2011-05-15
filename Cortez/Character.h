@@ -17,6 +17,12 @@
     
     // [TODO] - subclass CCSpriteFrameCache to handle these anims naturally
     NSMutableDictionary *anims;
+    
+    
+    // Attributes
+    // [CAD] - should I move this to a NSMutableDictionary so I can support a larger and variable number of attributes?
+    NSString *name;
+    NSString *conversation;
 }
 
 // [TODO] - Load this from an xml file somehow
@@ -25,6 +31,10 @@
 
 @property (nonatomic, retain) CCSprite *mySprite;
 @property (nonatomic, retain) CCSpriteBatchNode *myBatchNode;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *conversation;
+
+-(id)initWithDetails:(NSString *)newName :(NSString *)newConvo;
 
 - (CCAction *)animateToPoint:(CGPoint)p0 :(CGPoint)p1 :(bool)addTrailingWalk;
 - (void)flipMe;

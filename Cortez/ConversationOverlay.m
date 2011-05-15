@@ -30,13 +30,32 @@
 	return scene;
 }
 
+-(id) initWithConvo:(NSString *)convoName
+{
+    if( (self=[super init])) {
+        
+        // setup convo with filename passed
+        [self setupConvo:convoName];
+        //add overlay sprite
+        CGSize s = [[CCDirector sharedDirector] winSize];
+        CCSprite *leftNav = [CCSprite spriteWithFile:@"sidebar.png"];
+        // set the anchor to the top right so we can position easier
+        [leftNav setAnchorPoint:ccp(1,1)];
+        [leftNav setPosition:ccp(s.width, s.height)];
+        // scale down to whatever resolution needed - asset is built to iphone4 specs
+        [leftNav setScale:s.height/leftNav.contentSize.height];
+        [self addChild:leftNav z:1];
+    }
+    return self;
+}
+
 // on "init" you need to initialize your instance
 -(id) init
 {
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
-		[self setupConvo];
+		[self setupConvo:@"conversation_test.plist"];
         // add overlay sprite
         CGSize s = [[CCDirector sharedDirector] winSize];
         CCSprite *leftNav = [CCSprite spriteWithFile:@"sidebar.png"];
@@ -86,7 +105,7 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 {
 	CGSize s = [[CCDirector sharedDirector] winSize];
     
-	// closed purble poly
+	// closed grey poly
 	glColor4ub(0, 0, 0, 150);
 	CGPoint vertices2[] = { ccp(s.width*0.15,0), ccp(s.width*0.15,s.height*0.25), ccp(s.width*0.85,s.height*0.25), ccp(s.width*0.85,0) };
         
@@ -95,16 +114,14 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 
 #pragma mark - Conversations
 
-// [TODO] - subclass CCMenuItem to have more info than just an integer "tag"
-
-- (void)setupConvo
+- (void)setupConvo:(NSString *)filename
 {    
     [self lockConvo];
-    NSString *path = [CCFileUtils fullPathFromRelativePath:@"conversation_test.plist"];
+    NSString *path = [CCFileUtils fullPathFromRelativePath:filename];
     NSDictionary *parentDict = [NSDictionary dictionaryWithContentsOfFile:path];
     convo = [parentDict objectForKey:@"first_convo"];
     [convo retain];
-    [self showStep:@"0"];
+    [self showStep:nil data:@"0"];
 }
 
 - (void)lockConvo
@@ -118,7 +135,6 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 - (void)unlockConvo:(CCMenuItem *)menuItem
 {
     [[GameEngine sharedGameEngine] unlockNode:self];
-//    [self removeAllChildrenWithCleanup:YES];
     [self removeChild:menu cleanup:YES];
     
     // [CAD] - this works but is janky - I should be able to pass whoever called me a message that I'm done without caring what kind of class it was
@@ -127,12 +143,30 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
 
 - (void)doSomething:(CCMenuItem *)menuItem
 {
-    [self showStep:[NSString stringWithFormat:@"%d",[menuItem tag]]];
+    NSDictionary *optionData = [menuItem userData];
+    
+    [self removeChildByTag:PC_TEXT cleanup:YES];
+    CGSize s = [[CCDirector sharedDirector] winSize];
+    NSString *greeting = [NSString stringWithString:[optionData objectForKey:@"response_text"]];
+    CCLabelTTF *greetingLabel = [CCLabelTTF labelWithString:greeting fontName:@"Times New Roman" fontSize:18];
+    [greetingLabel setColor:ccc3(255, 255, 255)];
+    greetingLabel.position = ccp(s.width*0.50, s.height*0.22);
+    
+    // queue up a sequence of move down, fade out, and call the next function
+    [self removeChildByTag:NPC_TEXT cleanup:YES];
+    id moveDown = [CCMoveBy actionWithDuration:1.5 position:ccp(0, -s.height*0.06)];
+    id fadeout = [CCFadeOut actionWithDuration:2];
+    id moveAndFade = [CCSpawn actions:moveDown, fadeout, nil];
+    id showNext = [CCCallFuncND actionWithTarget:self selector:@selector(showStep:data:) data:[optionData objectForKey:@"leads_to"]];
+    id seq = [CCSequence actions:moveAndFade, showNext, nil];
+    
+    [self addChild:greetingLabel z:2 tag:PC_TEXT];
+    
+    [greetingLabel runAction:seq];
 }
 
-- (void)showStep:(NSString *)stepLabel
+- (void)showStep:(id)node data:(void *)stepLabel
 {
-    //[self removeAllChildrenWithCleanup:YES];
     [self removeChild:menu cleanup:YES];
     NSDictionary *stepDict = [convo objectForKey:stepLabel];
     CGSize s = [[CCDirector sharedDirector] winSize];
@@ -141,44 +175,25 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
     CCLabelTTF *greetingLabel = [CCLabelTTF labelWithString:greeting fontName:@"Times New Roman" fontSize:18];
     [greetingLabel setColor:ccc3(255, 50, 255)];
     greetingLabel.position = ccp(s.width*0.50, s.height*0.22);
-    [self addChild:greetingLabel];
+    [self addChild:greetingLabel z:2 tag:NPC_TEXT];
     
     NSString *immediateAction = [stepDict objectForKey:@"action"];
     if ([immediateAction length]) {
         if ([immediateAction isEqualToString:@"exit"]) {
-            CCMenuItemFont *option = [CCMenuItemFont itemFromString:@"Goodbye" target:self selector:@selector(unlockConvo:)];
-            menu = [CCMenu menuWithItems:option, nil];
-            [menu setPosition:ccp(s.width*0.5, s.height*0.16)];
-            [self addChild:menu];
+            CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:@"btn_exit.png" 
+                                                               selectedImage:@"btn_exit_down.png" 
+                                                                      target:self 
+                                                                    selector:@selector(unlockConvo:)];
+            menu = [CCMenu menuWithItems:menuItem, nil];
+            [menu setPosition:ccp(s.width*0.90, s.height*0.5)];
+            [self addChild:menu z:2 tag:MENU];
             return;
         }
     }
     
-    /*
-    [CCMenuItemFont setFontName:@"Times New Roman"];
-    [CCMenuItemFont setFontSize:18];
     menu = [CCMenu menuWithItems:nil];
-    [menu setPosition:ccp(s.width*0.5, s.height*0.10)];
-    [self addChild:menu];
-    NSLog(@"Dissecting step: %@", stepDict);
-    for (NSString *optionName in stepDict)
-    {        
-        if (!([optionName hasSuffix:@"response"])) {
-            NSLog(@"Skipping %@", optionName);
-            continue;
-        }
-        NSLog(@"Dissecting option %@", optionName);
-        NSDictionary *optionDict = [stepDict objectForKey:optionName];
-        NSString *optionText = [optionDict objectForKey:@"text"];
-        CCMenuItemFont *option = [CCMenuItemFont itemFromString:optionText target:self selector:@selector(doSomething:)];
-        [option setTag:[[optionDict objectForKey:@"leads_to"] intValue]];
-        [menu addChild:option];
-    }
-    [menu alignItemsVerticallyWithPadding:0.0];
-     */
-    menu = [CCMenu menuWithItems:nil];
-    [menu setPosition:ccp(s.width*0.85, s.height*0.5)];
-    [self addChild:menu z:2];
+    [menu setPosition:ccp(s.width*0.90, s.height*0.5)];
+    [self addChild:menu z:2 tag:MENU];
     int i = 1;
     for (NSString *optionName in stepDict)
     {
@@ -186,19 +201,33 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
             continue;
         }
         NSDictionary *optionDict = [stepDict objectForKey:optionName];
-        NSLog(@"Dissecting option %@", optionName);
-        //NSString *optionText = [optionDict objectForKey:@"text"];
-        CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:@"btn_nice.png" 
-                                                           selectedImage:@"btn_nice_down.png" 
+        NSString *optionText = [optionDict objectForKey:@"text"];
+        NSString *btnName;
+        // [CAD] - set this up in a config file so we don't have to do this hacky workaround.
+        //      Ideally we would have a list of response types and their corresponding icons
+        if ([optionName isEqualToString:@"inquiry_response"]) {
+            btnName = [NSString stringWithFormat:@"btn_info"];
+        }
+        else if ([optionName isEqualToString:@"nice_response"]) {
+            btnName = [NSString stringWithFormat:@"btn_nice"];
+        }
+        else if ([optionName isEqualToString:@"mean_response"]) {
+            btnName = [NSString stringWithFormat:@"btn_mean"];
+        }
+        else {
+            NSLog(@"Bad response type - no available button icon!");
+        }
+        CCMenuItemImage *menuItem = [CCMenuItemImage itemFromNormalImage:[NSString stringWithFormat:@"%@.png", btnName]
+                                                           selectedImage:[NSString stringWithFormat:@"%@_down.png", btnName]
                                                                   target:self 
                                                                 selector:@selector(doSomething:)];
-        [menuItem setTag:[[optionDict objectForKey:@"leads_to"] intValue]];
-//        [menuItem setPosition:ccp(-100,0)];
-//        [menuItem setAnchorPoint:ccp(i,0)];
+        NSDictionary *optionData = [NSDictionary dictionaryWithObjectsAndKeys:[optionDict objectForKey:@"leads_to"], @"leads_to", optionText, @"response_text", nil];
+        [menuItem setUserData:optionData];
+        [optionData retain];
         i++;
         [menu addChild:menuItem];        
     }
-    [menu alignItemsVerticallyWithPadding:0.0];
+    [menu alignItemsVerticallyWithPadding:s.height/5.0];
 }
 
 @end

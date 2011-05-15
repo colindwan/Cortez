@@ -20,10 +20,18 @@
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
 
-- (void)setupConvo;
+- (id)initWithConvo:(NSString *)convoName;
+
+- (void)setupConvo:(NSString *)filename;
 - (void)lockConvo;
 - (void)doSomething:(CCMenuItem *)menuItem;
 - (void)unlockConvo:(CCMenuItem *)menuItem;
 
-- (void)showStep:(NSString *)stepLabel;
+- (void)showStep:(id)node data:(void *)stepLabel;
+
+
+// Tags
+#define NPC_TEXT    1
+#define PC_TEXT     2
+#define MENU        3
 @end
