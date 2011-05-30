@@ -266,7 +266,7 @@
     CGPoint location = [self convertTouchToNodeSpace:touch];
     bool bEngageNPC = false;
     Character *foundChar = nil;
-    CGPoint temp = [self pointInCharacter:location :foundChar];
+    CGPoint temp = [self pointInCharacter:location :&foundChar];
     if (!CGPointEqualToPoint(temp, CGPointZero)) {
         location = temp;
         bEngageNPC = true;
@@ -345,7 +345,9 @@
         }
         seq = [CCSequence actions:seq, [CCCallFunc actionWithTarget:self selector:@selector(pointInTrigger)], nil];
         if (bEngageNPC) {
-            seq = [CCSequence actions:seq, [CCCallFunc actionWithTarget:self selector:@selector(startConvo)], nil];
+            //seq = [CCSequence actions:seq, [CCCallFunc actionWithTarget:self selector:@selector(startConvo)], nil];
+            //[CCCallFuncND actionWithTarget:self selector:@selector(showStep:data:) data:[optionData objectForKey:@"leads_to"]]
+            seq = [CCSequence actions:seq, [CCCallFuncND actionWithTarget:self selector:@selector(startConvo:data:) data:foundChar], nil];
         }
         [mainChar.mySprite runAction:seq];
         [mainChar.mySprite runAction:animSeq];
@@ -357,7 +359,10 @@
     {
         id seq = [CCSequence actions:[CCMoveTo actionWithDuration:time position:location], [CCCallFunc actionWithTarget:self selector:@selector(pointInTrigger)], nil];
         if (bEngageNPC) {
-            seq = [CCSequence actions:seq, [CCCallFunc actionWithTarget:self selector:@selector(startConvo)], nil];
+            //seq = [CCSequence actions:seq, [CCCallFunc actionWithTarget:self selector:@selector(startConvo)], nil];
+            //[CCCallFuncND actionWithTarget:self selector:@selector(showStep:data:) data:[optionData objectForKey:@"leads_to"]]
+            seq = [CCSequence actions:seq, [CCCallFuncND actionWithTarget:self selector:@selector(startConvo:data:) data:foundChar], nil];
+
         }
         [mainChar.mySprite runAction:seq];
     }
@@ -477,7 +482,7 @@
 
 #pragma mark - Character interaction
 
-- (CGPoint)pointInCharacter:(CGPoint)p0 :(Character *)foundChar
+- (CGPoint)pointInCharacter:(CGPoint)p0 :(Character **)foundChar
 {
 //    CGPoint p0 = mainChar.mySprite.position;
     for (int i = 0; i < [characters count]; i++)
@@ -501,7 +506,7 @@
         else
             newPoint = ccp(rect.origin.x + rect.size.width*1.5, rect.origin.y);
         
-        foundChar = tempChar;
+        *foundChar = tempChar;
         
         return newPoint;
 
@@ -509,12 +514,29 @@
     return CGPointZero;
 }
 
+//- (void)showStep:(id)node data:(void *)stepLabel
+- (void)startConvo:(id)node data:(void *)aWho
+{
+    Character *aNPC = aWho;
+    ConversationOverlay *overlay;
+    if (!([aNPC conversation])) {
+        overlay = [[ConversationOverlay alloc] initWithConvo:@"default_convo.plist"];
+    }
+    else {
+        overlay = [[ConversationOverlay alloc] initWithConvo:[aNPC conversation]];
+    }
+    [overlay setPosition:ccp(-[self position].x, -[self position].y)];
+    [self addChild:overlay z:100 tag:CONVO_TAG];
+}
+
+/*
 - (void)startConvo
 {
     // [TODO] - set up convo based on who I clicked on
     ConversationOverlay *overlay = [[ConversationOverlay alloc] initWithConvo:@"conversation_test.plist"];
     [self addChild:overlay z:100 tag:CONVO_TAG];
 }
+ */
 
 - (void)cleanupConvo
 {

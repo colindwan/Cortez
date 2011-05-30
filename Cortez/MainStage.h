@@ -52,7 +52,7 @@
 
 // Triggers
 - (bool)pointInTrigger;
-- (CGPoint)pointInCharacter:(CGPoint)p0 :(Character *)foundChar;
+- (CGPoint)pointInCharacter:(CGPoint)p0 :(Character **)foundChar;
 
 - (void)cleanupConvo;
 @end

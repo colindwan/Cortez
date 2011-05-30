@@ -31,6 +31,6 @@
  <objectgroup name="tools" width="20" height="9">
   <object type="generator" gid="28" x="240" y="83"/>
   <object type="generator" gid="28" x="224" y="253"/>
-  <object type="generator" gid="28" x="319" y="199"/>
+  <object type="generator" gid="28" x="359" y="201"/>
  </objectgroup>
 </map>

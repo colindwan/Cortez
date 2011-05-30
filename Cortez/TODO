@@ -1,0 +1,13 @@
+TODO List
+
+I'll try to keep a general roadmap of what I think the priorities/unfinished business is.  
+Feel free to add notes/items as needed
+
+
+Mission system - need to add something to track the overall progress of our character, drive events, conversations, etc
+Conversations - basic level added, need to figure out the connection between missions and conversations or responding to conversations based on attributes
+    - A better conversation editor is needed before we get too much further.
+Combat - not even started
+Main menu - once we have our mission system in, we'll want some form of saves, new character, etc
+Inventory/Equipment
+Attributes - NPCs have a very basic form right now but I need to abstract this a little more
