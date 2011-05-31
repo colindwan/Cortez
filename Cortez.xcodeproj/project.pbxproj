@@ -136,6 +136,9 @@
 		D06FF1DC1393FAD6001D0DF9 /* franks_convo.plist in Resources */ = {isa = PBXBuildFile; fileRef = D06FF1DB1393FAD6001D0DF9 /* franks_convo.plist */; };
 		D06FF1DF1393FC20001D0DF9 /* default_convo.plist in Resources */ = {isa = PBXBuildFile; fileRef = D06FF1DE1393FC20001D0DF9 /* default_convo.plist */; };
 		D06FF1E11393FD89001D0DF9 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = D06FF1E01393FD89001D0DF9 /* TODO */; };
+		D06FF1FF13946C44001D0DF9 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = D06FF1FE13946C44001D0DF9 /* Event.m */; };
+		D06FF20213946C53001D0DF9 /* EventMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = D06FF20113946C53001D0DF9 /* EventMgr.m */; };
+		D06FF20913946ED7001D0DF9 /* EventDetailsOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = D06FF20813946ED7001D0DF9 /* EventDetailsOverlay.m */; };
 		D0CEF0E51363A8F50031467F /* grass.tsx in Resources */ = {isa = PBXBuildFile; fileRef = D0CEF0E31363A8F50031467F /* grass.tsx */; };
 		D0CEF0E61363A8F50031467F /* wood.tsx in Resources */ = {isa = PBXBuildFile; fileRef = D0CEF0E41363A8F50031467F /* wood.tsx */; };
 		D0CEF0EA1363A90D0031467F /* tool_icons.png in Resources */ = {isa = PBXBuildFile; fileRef = D0CEF0E91363A90D0031467F /* tool_icons.png */; };
@@ -409,6 +412,12 @@
 		D06FF1DB1393FAD6001D0DF9 /* franks_convo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = franks_convo.plist; sourceTree = "<group>"; };
 		D06FF1DE1393FC20001D0DF9 /* default_convo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default_convo.plist; sourceTree = "<group>"; };
 		D06FF1E01393FD89001D0DF9 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		D06FF1FD13946C44001D0DF9 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		D06FF1FE13946C44001D0DF9 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		D06FF20013946C53001D0DF9 /* EventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventMgr.h; sourceTree = "<group>"; };
+		D06FF20113946C53001D0DF9 /* EventMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventMgr.m; sourceTree = "<group>"; };
+		D06FF20713946ED7001D0DF9 /* EventDetailsOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailsOverlay.h; sourceTree = "<group>"; };
+		D06FF20813946ED7001D0DF9 /* EventDetailsOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailsOverlay.m; sourceTree = "<group>"; };
 		D0CEF0E31363A8F50031467F /* grass.tsx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = grass.tsx; path = Resources/Tiles/grass.tsx; sourceTree = "<group>"; };
 		D0CEF0E41363A8F50031467F /* wood.tsx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = wood.tsx; path = Resources/Tiles/wood.tsx; sourceTree = "<group>"; };
 		D0CEF0E91363A90D0031467F /* tool_icons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tool_icons.png; path = "Resources/Tiles/Tool Tiles/tool_icons.png"; sourceTree = "<group>"; };
@@ -511,7 +520,9 @@
 				D016059A13552C77007D481E /* Core */,
 				D016059C13552CA3007D481E /* Config */,
 				D016059B13552C96007D481E /* Main */,
+				D06FF20313946E76001D0DF9 /* Events */,
 				D016059913552C58007D481E /* Pathing */,
+				D06FF1FB13946C07001D0DF9 /* Conversations */,
 				D016040B13552A01007D481E /* Resources */,
 				D01605A813553549007D481E /* Libraries */,
 				D06FF1E01393FD89001D0DF9 /* TODO */,
@@ -870,8 +881,6 @@
 				D0DE6E33135D106000A3A011 /* GameEngine.m */,
 				D0DC5D5713633CF900515B07 /* Character.h */,
 				D0DC5D5813633CF900515B07 /* Character.m */,
-				D0CEF0FA1363B8CE0031467F /* ConversationOverlay.h */,
-				D0CEF0FB1363B8CE0031467F /* ConversationOverlay.m */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -895,6 +904,28 @@
 				D016055213552A05007D481E /* Supporting Files */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		D06FF1FB13946C07001D0DF9 /* Conversations */ = {
+			isa = PBXGroup;
+			children = (
+				D0CEF0FA1363B8CE0031467F /* ConversationOverlay.h */,
+				D0CEF0FB1363B8CE0031467F /* ConversationOverlay.m */,
+			);
+			name = Conversations;
+			sourceTree = "<group>";
+		};
+		D06FF20313946E76001D0DF9 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				D06FF1FD13946C44001D0DF9 /* Event.h */,
+				D06FF1FE13946C44001D0DF9 /* Event.m */,
+				D06FF20013946C53001D0DF9 /* EventMgr.h */,
+				D06FF20113946C53001D0DF9 /* EventMgr.m */,
+				D06FF20713946ED7001D0DF9 /* EventDetailsOverlay.h */,
+				D06FF20813946ED7001D0DF9 /* EventDetailsOverlay.m */,
+			);
+			name = Events;
 			sourceTree = "<group>";
 		};
 		D0CEF0E01363A8D20031467F /* textures */ = {
@@ -1124,6 +1155,9 @@
 				D0DE6E34135D106000A3A011 /* GameEngine.m in Sources */,
 				D0DC5D5913633CF900515B07 /* Character.m in Sources */,
 				D0CEF0FC1363B8CE0031467F /* ConversationOverlay.m in Sources */,
+				D06FF1FF13946C44001D0DF9 /* Event.m in Sources */,
+				D06FF20213946C53001D0DF9 /* EventMgr.m in Sources */,
+				D06FF20913946ED7001D0DF9 /* EventDetailsOverlay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

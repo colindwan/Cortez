@@ -17,6 +17,8 @@
 #import "GameEngine.h"
 #import "Character.h"
 #import "ConversationOverlay.h"
+#import "Event.h"
+#import "EventDetailsOverlay.h"
 
 // HelloWorldLayer implementation
 @implementation MainStage
@@ -517,6 +519,7 @@
 //- (void)showStep:(id)node data:(void *)stepLabel
 - (void)startConvo:(id)node data:(void *)aWho
 {
+    /*
     Character *aNPC = aWho;
     ConversationOverlay *overlay;
     if (!([aNPC conversation])) {
@@ -527,6 +530,15 @@
     }
     [overlay setPosition:ccp(-[self position].x, -[self position].y)];
     [self addChild:overlay z:100 tag:CONVO_TAG];
+     */
+    
+    // [CAD] - testing event details by triggering them in place of an npc convo
+    EventDetailsOverlay *overlay;
+    Event *myEvent = [[Event alloc] init];
+    [myEvent setSEventName:@"A Test Event"];
+    [myEvent setSGoalName:@"Do something!"];
+    overlay = [[EventDetailsOverlay alloc] initWithEvent:myEvent];
+    [self addChild:overlay z:100];
 }
 
 /*

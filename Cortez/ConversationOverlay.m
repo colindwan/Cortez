@@ -138,7 +138,8 @@ void ccFillPoly( CGPoint *poli, int points, BOOL closePolygon )
     [self removeChild:menu cleanup:YES];
     
     // [CAD] - this works but is janky - I should be able to pass whoever called me a message that I'm done without caring what kind of class it was
-    [(MainStage *)[self parent] cleanupConvo];
+    //[(MainStage *)[self parent] cleanupConvo];
+    [[self parent] removeChild:self cleanup:NO];
 }
 
 - (void)doSomething:(CCMenuItem *)menuItem
